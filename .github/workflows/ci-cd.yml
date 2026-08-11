@@ -1,3 +1,4 @@
+
 name: CI/CD Pipeline
 
 on:
@@ -30,3 +31,16 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/devops-app:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/devops-app:${{ github.sha }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Show image to deploy
+        run: |
+          echo "Deploying image:"
+          echo "${{ secrets.DOCKER_USERNAME }}/devops-app:${{ github.sha }}"
