@@ -6,7 +6,7 @@ app = Flask(__name__)
 def home():
     return "CI/CD with Helm is working with version 2!"
 
-app.route('/health')
+@app.route('/health')
 def health():
     return "OK", 200
 
