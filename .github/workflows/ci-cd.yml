@@ -1,4 +1,3 @@
-
 name: CI/CD Pipeline
 
 on:
@@ -13,6 +12,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Test application
+        run: |
+          python -m py_compile app.py
 
       - name: Docker Login
         uses: docker/login-action@v3
@@ -32,15 +44,6 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/devops-app:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/devops-app:${{ github.sha }}
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Show image to deploy
+      - name: Helm Lint
         run: |
-          echo "Deploying image:"
-          echo "${{ secrets.DOCKER_USERNAME }}/devops-app:${{ github.sha }}"
+          helm lint ./helm/devops-app
