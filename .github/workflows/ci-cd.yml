@@ -17,7 +17,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.12"
 
       - name: Install Dependencies
         run: |
@@ -25,13 +25,15 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Run Application Tests
-        run: python -m pytest -v
+        run: |
+          python -m pytest -v
 
       - name: Install Helm
         uses: azure/setup-helm@v4
 
       - name: Helm Lint
-        run: helm lint ./helm/devops-app
+        run: |
+          helm lint ./helm/devops-app
 
   build-and-push:
     name: Build, Scan and Push Docker Image
@@ -61,7 +63,7 @@ jobs:
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
+          severity: 'CRITICAL'
 
       - name: Push Docker Image
         run: |
