@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "CI/CD with Helm is working with version 2!"
+    return "CI/CD with Helm is working with version 3!"
 
 @app.route('/health')
 def health():
